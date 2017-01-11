@@ -25,4 +25,4 @@ HTML Outputs correct and usable web page with no errors.
 
 ## Demo
 
-Compiled and final product can be seen [here](https://dot13-quiz1.appspot.com/blog "Multi-User Blog")
+Compiled and final product can be seen [here](https://multi-user-blog-gm.appspot.com/blog "Multi-User Blog")

@@ -473,7 +473,7 @@ class PostPage(BlogHandler):
 # Delete Comment
 
 
-class DelComment(BlogHandler):
+class DeleteComment(BlogHandler):
 
     def get(self, blog_id, comment_id):
         # Get comment
@@ -497,7 +497,7 @@ class DelComment(BlogHandler):
 # Edit Comment
 
 
-class EComment(BlogHandler):
+class EditComment(BlogHandler):
 
     def get(self, blog_id, comment_id):
         # Get the comment
@@ -754,6 +754,6 @@ app = webapp2.WSGIApplication([
     ('/welcome', Welcome),
     ('/rwelcome', ReturnWelcome),
     ('/edit/([0-9]+)', EditPost),
-    ('/post/([0-9]+)/editcomment/([0-9]+)', EComment),
-    ('/post/([0-9]+)/deletecomment/([0-9]+)', DelComment),
+    ('/post/([0-9]+)/editcomment/([0-9]+)', EditComment),
+    ('/post/([0-9]+)/deletecomment/([0-9]+)', DeleteComment),
 ], debug=True)

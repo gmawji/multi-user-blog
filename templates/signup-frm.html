@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <form method="post" class="form-signin">
+    <h2 class="form-signin-heading">Signup</h2>
+        <div class="form-group">
+          <label for="InputUsername" class="sr-only">Username</label>
+          <input type="text" class="form-control" id="InputUsername" placeholder="Username" name="username" value="{{username}}">
+
+          <label for="InputPassword" class="sr-only">Password</label>
+          <input type="password" class="form-control" id="InputPassword" placeholder="Password" name="password" value="">
+
+          <label for="VerifyPassword" class="sr-only">Verify Password</label>
+          <input type="password" class="form-control" id="VerifyPassword" placeholder="Verify Password" name="verify" value="">
+
+          <label for="InputEmail" class="sr-only">Email</label>
+          <input type="email" class="form-control" id="InputEmail" placeholder="Email" name="email" value="{{email}}">
+
+          <div class="error">{{error_username}}</div>
+          <div class="error">{{error_password}}</div>
+          <div class="error">{{error_verify}}</div>
+          <div class="error">{{error_email}}</div>
+        </div>
+
+        <input type="submit" class="btn btn-primary btn-md"></input>
+    </form>
+</div>
+{% endblock %}

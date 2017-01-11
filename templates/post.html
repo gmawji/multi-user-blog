@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header class="intro-header" style="background-image: url('/static/img/post-bg.jpg')">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading">
+                    <h1>{{post.subject}}</h1>
+                    <hr class="small">
+                    <span class="subheading">Posted by {{post.user.name}} on {{post.created.strftime("%b %d, %Y")}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="post-preview">
+        <p class="post-subtitle">{{post.content | safe}}</p>
+    </div>
+
+{% if user %}
+<hr class="small">
+    <form method="POST">
+        <input type="submit" class="btn btn-success btn-sm" name='like' value='&#128077; {{likes}} likes'>
+        <input type="submit" class="btn btn-warning btn-sm" name='unlike' value='&#128078; {{unlikes}} unlikes'>
+        <input type="submit" class="btn btn-info btn-sm" name='edit' value='&#9998; edit'>
+        <input type="submit" class="btn btn-danger btn-sm" name='delete' value="&#9003; delete">
+    </form>
+    <span class="alert-danger">{{error}}</span>
+{% endif %}
+<hr>
+{% if comcount == 1 %}
+    <label class="comment-count">{{comcount}} comment</label>
+{% else %}
+    <label class="comment-count">{{comcount}} comments</label>
+{% endif %}
+{% for comment in pcomments %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p class="post-subtitle">{{comment.text}}</p>
+            <hr>
+            <div>
+                <div class="pull-left">
+                    <p class="post-meta-comment">Posted by {{comment.user.name}} on {{comment.created.strftime("%b %d, %Y")}}</p>
+                </div>
+                <div class="pull-right">
+                    {% if comment.user.name == user.name %}
+                        <a style="color:blue; font-size: 14px" href="/post/{{post.key().id()}}/editcomment/{{comment.key().id()}}">edit</a> <span style="font-size: 16px">|</span>
+                        <a style="color:blue; font-size: 14px" href="/post/{{post.key().id()}}/deletecomment/{{comment.key().id()}}">delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+<br><br>
+{% if user %}
+    <form method="POST">
+        <label class="comment-count">
+            Add Comment<br>
+            <textarea class="form-control" name="comment_text" style="width:400px;height:100px;">{{comment_text | safe}}</textarea>
+        </label>
+        <br>
+        <div class="alert-danger">{{comment_error}}</div>
+        <input type="submit" class="btn btn-success btn-sm" name="add_comment" value="Post">
+    </form>
+</div>
+{% endif %}
+{% endblock %}

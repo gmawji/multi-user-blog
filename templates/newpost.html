@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="comment-count-edit">New Post</h1>
+      <form method="post">
+        <label class="edit-post-sub">
+          <div>Subject</div>
+          <input class="form-control" style="width:400px;" type="text" name="subject" value="{{subject}}">
+        </label>
+
+      <br>
+
+        <label class="edit-post-sub">
+          <div>Blog</div>
+          <textarea class="form-control" name="content" style="width:400px;height:200px;">{{content}}</textarea>
+        </label>
+
+      <br>
+
+        <div class="alert-danger"">{{post_error}}</div>
+
+        <input type="submit" class="btn btn-success btn-sm">
+
+      </form>
+</div>
+{% endblock %}

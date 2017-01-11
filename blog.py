@@ -268,6 +268,8 @@ class BlogPage(BlogHandler):
         posts = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC")
         if posts:
             self.render("index.html", posts=posts)
+        else:
+            self.redirect("/newpost")
 
 # New Post
 
@@ -282,10 +284,8 @@ class NewPost(BlogHandler):
 
     # Get content of user and create new post
     def post(self):
-        if self.user:
-            self.render("newpost.html")
-        else:
-            self.redirect("/login")
+        if not self.user:
+            return self.redirect("/login")
 
         subject = self.request.get("subject")
         content = self.request.get("content").replace('\n', '<br>')
@@ -502,16 +502,20 @@ class DeleteComment(BlogHandler):
         comment = Comment.get_by_id(int(comment_id))
         # Check comment
         if comment:
+            # Check if user is logged in
+            if self.user:
             # Check if user is creator of comment
-            if comment.user.name == self.user.name:
-                # If user is creator
-                # Delete comment
-                db.delete(comment)
-                time.sleep(0.1)
-                self.redirect('/post/%s' % str(blog_id))
-            # If user is not creator send error
+                if comment.user.name == self.user.name:
+                    # If user is creator
+                    # Delete comment
+                    db.delete(comment)
+                    time.sleep(0.1)
+                    self.redirect('/post/%s' % str(blog_id))
+                # If user is not creator send error
+                else:
+                    self.write("You can't delete another user's comment.")
             else:
-                self.write("You can't delete another user's comment.")
+                self.write('You are not logged in.')
         # If no comment
         else:
             self.write("Oops. This comment vanished.")
@@ -527,15 +531,18 @@ class EditComment(BlogHandler):
         comment = Comment.get_by_id(int(comment_id))
         # Check comment
         if comment:
-            # Check if user is creator of comment
-            if comment.user.name == self.user.name:
-                # If user is creator
-                # Edit comment
-                self.render("ecomment.html", comment_text=comment.text)
-            # If user is not creator send error
+            if self.user:
+                # Check if user is creator of comment
+                if comment.user.name == self.user.name:
+                    # If user is creator
+                    # Edit comment
+                    self.render("ecomment.html", comment_text=comment.text)
+                # If user is not creator send error
+                else:
+                    error = "You can't edit another user's comment."
+                    self.render("ecomment.html", edit_error=error)
             else:
-                error = "You can't edit another user's comment."
-                self.render("ecomment.html", edit_error=error)
+                self.write ("You are not logged in.")
         # If no comment
         else:
             error = "Oops. This comment vanished."

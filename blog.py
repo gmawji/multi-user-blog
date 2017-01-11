@@ -19,29 +19,41 @@ jinja_env = jinja2.Environment(
 secret = 'aa7b4911c552e3792efe9eea514f1d8d'
 
 # Global
+
+
 def render_str(template, **params):
     t = jinja_env.get_template(template)
     return t.render(params)
 
 # Get post key
+
+
 def post_key(name='default'):
     return db.Key.from_path('Blog', name)
 
 # Make secure cookie value
+
+
 def make_secure_val(val):
     return '%s|%s' % (val, hmac.new(secret, val).hexdigest())
 
 # Check secure cookie value
+
+
 def check_secure_val(secure_val):
     val = secure_val.split('|')[0]
     if secure_val == make_secure_val(val):
         return val
 
 # Make salt!
+
+
 def make_salt(length=5):
     return ''.join(random.choice(letters) for x in xrange(length))
 
 # Create password with hash name, password, & salt
+
+
 def make_pw_hash(name, pw, salt=None):
     if not salt:
         salt = make_salt()
@@ -49,17 +61,22 @@ def make_pw_hash(name, pw, salt=None):
     return '%s,%s' % (salt, h)
 
 # Check if password is valid by comparing hash value
+
+
 def valid_pw(name, password, h):
     salt = h.split(',')[0]
     return h == make_pw_hash(name, password, salt)
 
 # Get user key
+
+
 def users_key(group='default'):
     return db.Key.from_path('users', group)
 
 
-
 # Validate password
+
+
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
 
@@ -100,8 +117,7 @@ class BlogHandler(webapp2.RequestHandler):
         return password and PASS_RE.match(password)
 
     # Define email
-    EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
-
+    EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 
     # Read secure cookie
     def read_secure_cookie(self, name):
@@ -287,14 +303,14 @@ class NewPost(BlogHandler):
             self.redirect('/post/%s' % str(a.key().id()))
         # If no subject or content then send post_error
         else:
-            post_error = "You need a subject and some content to submit a post."
+            post_error = "You need a subject and content to submit a post."
             self.render(
                 "newpost.html",
                 subject=subject,
                 content=content,
                 post_error=post_error)
 
-#Post Page
+# Post Page
 
 
 class PostPage(BlogHandler):
@@ -340,7 +356,8 @@ class PostPage(BlogHandler):
             # If logged user clicks on like
             if self.request.get("like"):
                 # Check to see if liking user own post
-                if post.user.key().id() != User.by_name(self.user.name).key().id():
+                if post.user.key().id() != User.by_name(self.user.name).key(
+                                            ).id():
                     # Check if user has liked post before
                     if previously_liked == 0:
                         # Add likes to the database and refresh
@@ -375,7 +392,8 @@ class PostPage(BlogHandler):
             # If logged in user clicks unlike
             if self.request.get("unlike"):
                 # Check to see if unliking user own post
-                if post.user.key().id() != User.by_name(self.user.name).key().id():
+                if post.user.key().id() != User.by_name(self.user.name).key(
+                                            ).id():
                     # Check if user has unliked post before
                     if previously_unliked == 0:
                         # Add ulikes to the database and refresh
@@ -385,7 +403,7 @@ class PostPage(BlogHandler):
                         ul.put()
                         time.sleep(0.1)
                         self.redirect('/post/%s' % str(post.key().id()))
-                    #If user has unliked before send error
+                    # If user has unliked before send error
                     else:
                         error = "You already unliked this post."
                         self.render(
@@ -422,7 +440,7 @@ class PostPage(BlogHandler):
                     self.redirect('/post/%s' % str(post.key().id()))
                 # If nothing has been entered send error
                 else:
-                    comment_error = "You must enter a comment before you click Post."
+                    comment_error = "You must enter a comment before you Post."
                     self.render(
                         "post.html",
                         post=post,
@@ -434,7 +452,8 @@ class PostPage(BlogHandler):
             # If logged in user clicks edit
             if self.request.get("edit"):
                 # Check if logged in user created post
-                if post.user.key().id() == User.by_name(self.user.name).key().id():
+                if post.user.key().id() == User.by_name(self.user.name).key(
+                                            ).id():
                     # If yes take user to edit page
                     self.redirect('/edit/%s' % str(post.key().id()))
                 # If post does not belong to user send error
@@ -451,7 +470,8 @@ class PostPage(BlogHandler):
             # If logged in user clicks on delete
             if self.request.get("delete"):
                 # Check if logged in user created post
-                if post.user.key().id() == User.by_name(self.user.name).key().id():
+                if post.user.key().id() == User.by_name(self.user.name).key(
+                                            ).id():
                     # If yes delete post
                     db.delete(key)
                     time.sleep(0.1)
@@ -744,7 +764,7 @@ class Logout(BlogHandler):
             error = 'Please log in before your try to log out.'
             self.render('login-form.html', error=error)
 
-#====================================================
+# ====================================================
 
 app = webapp2.WSGIApplication([
     ('/', BlogPage),

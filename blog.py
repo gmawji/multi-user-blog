@@ -264,6 +264,11 @@ class NewPost(BlogHandler):
 
     # Get content of user and create new post
     def post(self):
+        if self.user:
+            self.render("newpost.html")
+        else:
+            self.redirect("/login")
+
         subject = self.request.get("subject")
         content = self.request.get("content").replace('\n', '<br>')
         user_id = User.by_name(self.user.name)

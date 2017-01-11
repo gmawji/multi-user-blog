@@ -17,7 +17,20 @@ Python 2.7
 Google App Engine
 Jinja2
 
-The app.yaml has a list of libraries for this project. Google App Engine will automatically make them avaialble. Just dont forget to import!
+To Install:
+
+1. Clone/Fork this repo locally.
+2. You can use command line to run locally when testing by running dev_appserver.py.
+
+To Deploy:
+
+1. Download *GoogleAppEngine SDK* from Google's [site](https://cloud.google.com/appengine/ "Google App Engine").
+2. Extract downloaded file and place wherever you want it kept.
+3. Go to blog directory and run **gcloud init**. Follow instructions there.
+4. When ready to publish use **gcloud app deploy index.yaml** to deploy your indexes first.
+5. Then use **gcloud app deploy** to deploy your blog.
+6. Blog can be accessed quickly using **gcloud app browse**.
+7. URL will be [your-blog-id].appspot.com.
 
 ## Tests
 

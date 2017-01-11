@@ -57,22 +57,7 @@ def valid_pw(name, password, h):
 def users_key(group='default'):
     return db.Key.from_path('users', group)
 
-# Define username
-USER_RE = re.compile(r'^[a-zA-Z0-9_-]{3,20}$')
 
-# Validate username
-def valid_username(username):
-    return username and USER_RE.match(username)
-
-# Define password
-PASS_RE = re.compile(r'^.{3,20}$')
-
-# Validate password
-def valid_password(password):
-    return password and PASS_RE.match(password)
-
-# Define email
-EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 
 # Validate password
 def valid_email(email):
@@ -99,6 +84,23 @@ class BlogHandler(webapp2.RequestHandler):
         self.response.headers.add_header(
             'Set-Cookie',
             '%s=%s; Path=/' % (name, cookie_val))
+
+    # Define username
+    USER_RE = re.compile(r'^[a-zA-Z0-9_-]{3,20}$')
+
+    # Validate username
+    def valid_username(username):
+        return username and USER_RE.match(username)
+
+    # Define password
+    PASS_RE = re.compile(r'^.{3,20}$')
+
+    # Validate password
+    def valid_password(password):
+        return password and PASS_RE.match(password)
+
+    # Define email
+    EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 
 
     # Read secure cookie

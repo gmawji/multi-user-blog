@@ -645,6 +645,24 @@ class Signup(BlogHandler):
         self.render("signup-frm.html")
 
     def post(self):
+        # Define username
+        USER_RE = re.compile(r'^[a-zA-Z0-9_-]{3,20}$')
+
+        # Validate username
+        def valid_username(username):
+            return username and USER_RE.match(username)
+
+        # Define password
+        PASS_RE = re.compile(r'^.{3,20}$')
+
+        # Validate password
+        def valid_password(password):
+            return password and PASS_RE.match(password)
+
+        # Define email
+        EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+
+
         have_error = False
         # Get user info
         self.username = self.request.get('username')
